@@ -6,7 +6,7 @@ namespace DesignPattern
     {
         public static void Main(string[] args)
         {
-            var c = new Computer
+            var c = new Computer()
             {
                 Cpu = new IntelCpu(),
                 Memory = new KingstonMemory(),
@@ -20,19 +20,19 @@ namespace DesignPattern
     public class Computer
     {
         /// <summary>
-        /// Inter Cpu 属性
+        /// CPU属性
         /// </summary>
-        public IntelCpu Cpu { get; set; }
+        public ICpu Cpu { get; set; }
         
         /// <summary>
-        /// 金士顿 内存 属性
+        /// 内存属性
         /// </summary>
-        public KingstonMemory Memory { get; set; }
+        public IMemory Memory { get; set; }
         
         /// <summary>
-        /// 希捷 硬盘 属性
+        /// 硬盘属性
         /// </summary>
-        public XiJieHardDisk HardDisk { get; set; }
+        public IHardDisk HardDisk { get; set; }
 
         /// <summary>
         /// 运行
@@ -46,23 +46,60 @@ namespace DesignPattern
             this.Memory.Save();
         }
     }
-
+    
     /// <summary>
-    /// 希捷硬盘类
+    /// 硬盘接口
     /// </summary>
-    public class XiJieHardDisk
+    public interface IHardDisk
     {
         /// <summary>
         /// 保存数据
         /// </summary>
         /// <param name="data">数据</param>
-        public void Save(string data)
-        {
-            Console.WriteLine("使用希捷硬盘存储数据为：" + data);
-        }
-
+        void Save(string data);
+        
         /// <summary>
         /// 获取数据
+        /// </summary>
+        /// <returns>数据</returns>
+        string Get();
+    }
+
+    /// <summary>
+    /// 内存接口
+    /// </summary>
+    public interface IMemory
+    {
+        /// <summary>
+        /// 保存
+        /// </summary>
+        void Save();
+    }
+
+    /// <summary>
+    /// CPU接口
+    /// </summary>
+    public interface ICpu
+    {
+        /// <summary>
+        /// 运行
+        /// </summary>
+        void Run();
+    }
+
+    /// <summary>
+    /// 希捷硬盘类
+    /// </summary>
+    public class XiJieHardDisk : IHardDisk
+    {
+        /// <summary>
+        /// <inheritdoc cref="IHardDisk"/>
+        /// </summary>
+        /// <param name="data">数据</param>
+        public void Save(string data) => Console.WriteLine("使用希捷硬盘存储数据为：" + data);
+
+        /// <summary>
+        /// <inheritdoc cref="IHardDisk"/>
         /// </summary>
         /// <returns>数据</returns>
         public string Get()
@@ -73,30 +110,26 @@ namespace DesignPattern
     }
 
     /// <summary>
-    /// 金士顿内存类
+    /// 金士顿内存
     /// </summary>
-    public class KingstonMemory
+    public class KingstonMemory : IMemory
     {
         /// <summary>
-        /// 保存数据
+        /// 保存
         /// </summary>
-        public void Save()
-        {
-            Console.WriteLine("使用金士顿内存条");
-        }
+        public void Save() => Console.WriteLine("使用金士顿内存条");
     }
 
     /// <summary>
-    /// 因特尔CPU类
+    /// CPU
     /// </summary>
-    public class IntelCpu
+    public class IntelCpu : ICpu
     {
         /// <summary>
         /// 运行
         /// </summary>
-        public void Run()
-        {
-            Console.WriteLine("使用Intel处理器");
-        }
+        public void Run() => Console.WriteLine("使用Intel处理器");
     }
+
+    
 }
