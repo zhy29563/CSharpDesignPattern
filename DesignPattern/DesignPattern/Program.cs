@@ -6,145 +6,97 @@ namespace DesignPattern
     {
         public static void Main(string[] args)
         {
-            var graphicSystem = new GraphicSystem();
-            var rectangle = new Rectangle();
-            rectangle.SetLength(20);
-            rectangle.SetWidth(10);
-            graphicSystem.Quadrilateral = rectangle;
-            
-            graphicSystem.Resize();
-            graphicSystem.PrintLengthAndWidth();
-
-            Console.WriteLine("============");
-
-            var square = new Square();
-            square.SetSide(10);
-            graphicSystem.Quadrilateral = square;
-            graphicSystem.Resize();
-            graphicSystem.PrintLengthAndWidth();
-        }
-    }
-
-    /// <summary>
-    /// 图形系统
-    /// </summary>
-    public class GraphicSystem
-    {
-        /// <summary>
-        /// 基类对象属性
-        /// </summary>
-        public Quadrilateral Quadrilateral { get; set; }
-        
-        /// <summary>
-        /// 当宽度小于等于长度时，直到宽度大于长度
-        /// </summary>
-        public void Resize()
-        {
-            if (!(this.Quadrilateral is Rectangle rectangle))
-                return;
-            
-            var index = 0;
-            while (this.Quadrilateral.GetWidth() <= this.Quadrilateral.GetLength())
+            var c = new Computer
             {
-                Console.WriteLine($"正在执行第 {index++} 次循环");
-                rectangle.SetWidth(this.Quadrilateral.GetWidth() + 1);
-            }
+                Cpu = new IntelCpu(),
+                Memory = new KingstonMemory(),
+                HardDisk = new XiJieHardDisk()
+            };
+
+            c.Run();
         }
+    }
+    
+    public class Computer
+    {
+        /// <summary>
+        /// Inter Cpu 属性
+        /// </summary>
+        public IntelCpu Cpu { get; set; }
+        
+        /// <summary>
+        /// 金士顿 内存 属性
+        /// </summary>
+        public KingstonMemory Memory { get; set; }
+        
+        /// <summary>
+        /// 希捷 硬盘 属性
+        /// </summary>
+        public XiJieHardDisk HardDisk { get; set; }
 
         /// <summary>
-        /// 打印当前的长度和宽度
+        /// 运行
         /// </summary>
-        public void PrintLengthAndWidth()
+        public void Run()
         {
-            Console.WriteLine(this.Quadrilateral.GetLength());
-            Console.WriteLine(this.Quadrilateral.GetWidth());
+            Console.WriteLine("运行计算机");
+            var data = this.HardDisk.Get();
+            Console.WriteLine("从硬盘上获取的数据是：" + data);
+            this.Cpu.Run();
+            this.Memory.Save();
         }
     }
-    
+
     /// <summary>
-    /// 四边形基类
+    /// 希捷硬盘类
     /// </summary>
-    public interface Quadrilateral 
+    public class XiJieHardDisk
     {
         /// <summary>
-        /// 获取长度
+        /// 保存数据
         /// </summary>
-        /// <returns>长度</returns>
-        double GetLength();
-        
-        /// <summary>
-        /// 获取宽度
-        /// </summary>
-        /// <returns>宽度</returns>
-        double GetWidth();
-    }
-    
-    /// <summary>
-    /// 矩形类
-    /// </summary>
-    public class Rectangle : Quadrilateral
-    {
-        /// <summary>
-        /// 矩形长度
-        /// </summary>
-        private double length;
-        
-        /// <summary>
-        /// 矩形宽度
-        /// </summary>
-        private double width;
+        /// <param name="data">数据</param>
+        public void Save(string data)
+        {
+            Console.WriteLine("使用希捷硬盘存储数据为：" + data);
+        }
 
         /// <summary>
-        /// <inheritdoc cref="Quadrilateral"/>
+        /// 获取数据
         /// </summary>
-        /// <returns>长度</returns>
-        public double GetLength() => this.length;
-
-        /// <summary>
-        /// 设置长度
-        /// </summary>
-        /// <param name="length">长度</param>
-        public void SetLength(double length) => this.length = length;
-
-        /// <summary>
-        /// <inheritdoc cref="Quadrilateral"/>
-        /// </summary>
-        /// <returns>宽度</returns>
-        public double GetWidth() => this.width;
-
-        /// <summary>
-        /// 设置宽度
-        /// </summary>
-        /// <param name="width">宽度</param>
-        public void SetWidth(double width)=>this.width = width;
+        /// <returns>数据</returns>
+        public string Get()
+        {
+            Console.WriteLine("使用希捷希捷硬盘取数据");
+            return "数据";
+        }
     }
 
     /// <summary>
-    /// 正方形类
+    /// 金士顿内存类
     /// </summary>
-    public class Square : Quadrilateral
+    public class KingstonMemory
     {
         /// <summary>
-        /// 正方向边长
+        /// 保存数据
         /// </summary>
-        private double side; 
-        
+        public void Save()
+        {
+            Console.WriteLine("使用金士顿内存条");
+        }
+    }
+
+    /// <summary>
+    /// 因特尔CPU类
+    /// </summary>
+    public class IntelCpu
+    {
         /// <summary>
-        /// 设置正方向边长
+        /// 运行
         /// </summary>
-        /// <param name="side">边长</param>
-        public void SetSide(double side)=>this.side = side; 
-        
-        /// <summary>
-        /// <inheritdoc cref="Quadrilateral"/>
-        /// </summary>
-        /// <returns>长度</returns>
-        public double GetLength() => this.side; 
-        
-        /// <summary>
-        /// <inheritdoc cref="Quadrilateral"/>
-        /// </summary>
-        /// <returns>宽度</returns>
-        public double GetWidth() => this.side;
+        public void Run()
+        {
+            Console.WriteLine("使用Intel处理器");
+        }
     }
 }
