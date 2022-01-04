@@ -6,86 +6,59 @@ namespace DesignPattern
     {
         public static void Main(string[] args)
         {
-            var doorA = new ASafetyDoor();
-            doorA.AntiTheft();
-            doorA.Fireproof();
-            doorA.Waterproof();
-
-            Console.WriteLine("============");
-            var doorB = new BSafetyDoor();
-            doorB.AntiTheft();
-            doorB.Fireproof();
+            var agent = new Agent()
+            {
+                Star = new Star() {Name = "林青霞"},
+                Fans = new Fans() {Name = "李四"},
+                Company = new Company() {Name = "新宇宙媒体公司"}
+            };
+            
+            agent.Meeting();
+            agent.Business();
         }
     }
     
     /// <summary>
-    /// 防盗接口
+    /// 明星类
     /// </summary>
-    public interface IAntiTheft
+    public class Star
     {
-        /// <summary>
-        /// 防盗功能
-        /// </summary>
-        void AntiTheft();
+        public string Name {get;set;}
     }
 
     /// <summary>
-    /// 防水接口
+    /// 粉丝类
     /// </summary>
-    public interface IWaterproof
+    public class Fans
     {
-        /// <summary>
-        /// 防水功能
-        /// </summary>
-        void Waterproof();
+        public string Name {get;set;}
     }
 
     /// <summary>
-    /// 防火接口
+    /// 公司类
     /// </summary>
-    public interface IFireproof
+    public class Company
     {
-        /// <summary>
-        /// 防火功能
-        /// </summary>
-        void Fireproof();
-    }
-
-
-    /// <summary>
-    /// A 品牌安全门
-    /// </summary>
-    public class ASafetyDoor :  IAntiTheft, IFireproof, IWaterproof
-    {
-        /// <summary>
-        /// <inheritdoc cref="AntiTheft"/>
-        /// </summary>
-        public void AntiTheft() => Console.WriteLine("防盗");
-
-        /// <summary>
-        /// <inheritdoc cref="Fireproof"/>
-        /// </summary>
-        public void Fireproof() => Console.WriteLine("防火");
-
-        /// <summary>
-        /// <inheritdoc cref="Waterproof"/>
-        /// </summary>
-        public void Waterproof() => Console.WriteLine("防水");
+        public string Name {get;set;}
     }
 
     /// <summary>
-    /// B 品牌安全门
+    /// 经纪人类
     /// </summary>
-    public class BSafetyDoor : IAntiTheft, IFireproof
+    public class Agent
     {
-        /// <summary>
-        /// <inheritdoc cref="AntiTheft"/>
-        /// </summary>
-        public void AntiTheft() => Console.WriteLine("防盗");
+        public Star Star { get; set; }
+        public Fans Fans { get; set; }
+        public Company Company { get; set; }
 
         /// <summary>
-        /// <inheritdoc cref="Fireproof"/>
+        /// 粉丝见面会功能
         /// </summary>
-        public void Fireproof() => Console.WriteLine("防火");
+        public void Meeting() => Console.WriteLine(Star.Name + "和粉丝" + Fans.Name + "见面");
+
+        /// <summary>
+        /// 业务洽谈功能
+        /// </summary>
+        public void Business() => Console.WriteLine(Star.Name + "和" + Company.Name + "洽谈");
     }
 }
