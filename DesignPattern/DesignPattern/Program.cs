@@ -6,59 +6,79 @@ namespace DesignPattern
     {
         public static void Main(string[] args)
         {
-            var agent = new Agent()
-            {
-                Star = new Star() {Name = "林青霞"},
-                Fans = new Fans() {Name = "李四"},
-                Company = new Company() {Name = "新宇宙媒体公司"}
-            };
-            
-            agent.Meeting();
-            agent.Business();
+            new RedPetrolCar().Move();
+            new RedElectricCar().Move();
+            new WhitePetrolCar().Move();
+            new WhiteElectricCar().Move();
         }
     }
     
     /// <summary>
-    /// 明星类
+    /// 抽象汽车类
     /// </summary>
-    public class Star
+    public abstract class Car
     {
-        public string Name {get;set;}
-    }
-
-    /// <summary>
-    /// 粉丝类
-    /// </summary>
-    public class Fans
-    {
-        public string Name {get;set;}
-    }
-
-    /// <summary>
-    /// 公司类
-    /// </summary>
-    public class Company
-    {
-        public string Name {get;set;}
-    }
-
-    /// <summary>
-    /// 经纪人类
-    /// </summary>
-    public class Agent
-    {
-        public Star Star { get; set; }
-        public Fans Fans { get; set; }
-        public Company Company { get; set; }
-
         /// <summary>
-        /// 粉丝见面会功能
+        /// 行驶功能
         /// </summary>
-        public void Meeting() => Console.WriteLine(Star.Name + "和粉丝" + Fans.Name + "见面");
+        public abstract void Move();
+    }
 
+    /// <summary>
+    /// 汽油车类
+    /// </summary>
+    public abstract class PetrolCar : Car
+    {
+    }
+
+    /// <summary>
+    /// 电动汽车类
+    /// </summary>
+    public abstract class ElectricCar : Car
+    {
+    }
+
+    /// <summary>
+    /// 红色汽油汽车类
+    /// </summary>
+    public class RedPetrolCar : PetrolCar
+    {
         /// <summary>
-        /// 业务洽谈功能
+        /// <inheritdoc cref="Move"/>
         /// </summary>
-        public void Business() => Console.WriteLine(Star.Name + "和" + Company.Name + "洽谈");
+        public override void Move() => Console.WriteLine(nameof(RedPetrolCar));
+    }
+
+    /// <summary>
+    /// 白色汽油汽车类
+    /// </summary>
+    public class WhitePetrolCar : PetrolCar
+    {
+        /// <summary>
+        /// <inheritdoc cref="Move"/>
+        /// </summary>
+        public override void Move() => Console.WriteLine(nameof(WhitePetrolCar));
+    }
+
+    /// <summary>
+    /// 红色电动汽车类
+    /// </summary>
+    public class RedElectricCar : ElectricCar
+    {
+        /// <summary>
+        /// <inheritdoc cref="Move"/>
+        /// </summary>
+        public override void Move() => Console.WriteLine(nameof(RedPetrolCar));
+    }
+
+    /// <summary>
+    /// 白色电动汽车类
+    /// </summary>
+    public class WhiteElectricCar : ElectricCar
+    {
+        /// <summary>
+        /// <inheritdoc cref="Move"/>
+        /// </summary>
+        public override void Move() => Console.WriteLine(nameof(WhitePetrolCar));
     }
 }
