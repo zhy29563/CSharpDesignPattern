@@ -13,18 +13,12 @@ namespace DesignPattern
     }
     
     /// <summary>
-    /// 懒汉式：嵌套类方式
+    /// 懒汉式：延迟初始化方式
     /// </summary>
     public sealed class Singleton
     {
+        private static readonly Lazy<Singleton> Lazy = new Lazy<Singleton>(()=> new Singleton());
+        public static Singleton Instance => Lazy.Value;
         private Singleton() { }
-    
-        public static Singleton Instance => Nested.instance;
-
-        private class Nested
-        {
-            static Nested() { }
-            internal static readonly Singleton instance = new Singleton();
-        }
     }
 }
