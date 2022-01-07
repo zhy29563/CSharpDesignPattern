@@ -13,15 +13,18 @@ namespace DesignPattern
     }
     
     /// <summary>
-    /// 不完全懒汉式，不加锁的线程安全
+    /// 懒汉式：嵌套类方式
     /// </summary>
     public sealed class Singleton
     {
-        /// <summary>
-        /// 显式的静态构造函数用来告诉C#编译器在其内容实例化之前不要标记其类型
-        /// </summary>
-        static Singleton() { }
         private Singleton() { }
-        public static Singleton Instance { get; } = new Singleton();
+    
+        public static Singleton Instance => Nested.instance;
+
+        private class Nested
+        {
+            static Nested() { }
+            internal static readonly Singleton instance = new Singleton();
+        }
     }
 }
