@@ -7,17 +7,19 @@ namespace DesignPattern
         public static void Main(string[] args)
         {
             var store = new CoffeeStore();
-            var coffee = store.OrderCoffee("american");
+            store.Factory = new LatteCoffeeFactory();
+            var coffee = store.OrderCoffee();
             Console.WriteLine(coffee.Name);
 	
             Console.WriteLine("----------------------------");
-            coffee = store.OrderCoffee("latte");
+            store.Factory = new AmericanCoffeeFactory();
+            store.OrderCoffee();
             Console.WriteLine(coffee.Name);
         }
     }
     
     /// <summary>
-    /// 咖啡的抽象基类
+    /// 抽象产品
     /// </summary>
     public abstract class Coffee
     {
@@ -37,6 +39,9 @@ namespace DesignPattern
         public void AddMilk() => Console.WriteLine("加奶");
     }
 
+    /// <summary>
+    /// 具体产品
+    /// </summary>
     public class LatteCoffee : Coffee
     {
         /// <summary>
@@ -45,6 +50,9 @@ namespace DesignPattern
         public override string Name => "拿铁咖啡";
     }
 
+    /// <summary>
+    /// 具体产品
+    /// </summary>
     public class AmericanCoffee : Coffee
     {
         /// <summary>
@@ -54,33 +62,33 @@ namespace DesignPattern
     }
 
     /// <summary>
-    /// 简单工厂类
+    /// 抽象工厂
     /// </summary>
-    public class SimpleCoffeeFactory
+    public interface ICoffeeFactory
     {
         /// <summary>
-        /// 制作咖啡
+        /// 制作咖啡功能
         /// </summary>
-        /// <param name="type">咖啡名</param>
-        /// <returns>咖啡<see cref="Coffee"/></returns>
-        /// <exception cref="Exception"></exception>
-        public static Coffee CreateCoffee(string type)
-        {
-            Coffee coffee = null;
-            switch (type)
-            {
-                case "american":
-                    coffee = new AmericanCoffee();
-                    break;
-                case "latte":
-                    coffee = new LatteCoffee();
-                    break;
-                default:
-                    throw new Exception("对不起，您所点的咖啡没有");
-            }
+        /// <returns>咖啡</returns>
+        Coffee CreateCoffee();
+    }
 
-            return coffee;
-        }
+    /// <summary>
+    /// 具体工厂
+    /// </summary>
+    public class LatteCoffeeFactory : ICoffeeFactory
+    {
+        /// <inheritdoc cref="Coffee"/>
+        public Coffee CreateCoffee()=>new LatteCoffee();
+    }
+
+    /// <summary>
+    /// 具体工厂
+    /// </summary>
+    public class AmericanCoffeeFactory : ICoffeeFactory
+    {
+        /// <inheritdoc cref="Coffee"/>
+        public Coffee CreateCoffee() => new AmericanCoffee();
     }
     
     /// <summary>
@@ -89,13 +97,17 @@ namespace DesignPattern
     public class CoffeeStore
     {
         /// <summary>
+        /// 咖啡工厂抽象基类属性
+        /// </summary>
+        public ICoffeeFactory Factory {get;set;}
+        
+        /// <summary>
         /// 点咖啡功能
         /// </summary>
-        /// <param name="type">咖啡名</param>
         /// <returns>咖啡<see cref="Coffee"/></returns>
-        public Coffee OrderCoffee(string type)
+        public Coffee OrderCoffee()
         {
-            var coffee = SimpleCoffeeFactory.CreateCoffee(type);
+            var coffee = this.Factory.CreateCoffee();
 
             // 加奶
             coffee.AddMilk();
