@@ -54,19 +54,19 @@ namespace DesignPattern
     }
 
     /// <summary>
-    /// 咖啡店点餐系统，该系统可以为顾客提供美式咖啡与拿铁咖啡
+    /// 简单工厂类
     /// </summary>
-    public class CoffeeStore
+    public class SimpleCoffeeFactory
     {
         /// <summary>
-        /// 点咖啡功能
+        /// 制作咖啡
         /// </summary>
         /// <param name="type">咖啡名</param>
         /// <returns>咖啡<see cref="Coffee"/></returns>
         /// <exception cref="Exception"></exception>
-        public Coffee OrderCoffee(string type)
+        public Coffee CreateCoffee(string type)
         {
-            Coffee coffee;
+            Coffee coffee = null;
             switch (type)
             {
                 case "american":
@@ -78,6 +78,25 @@ namespace DesignPattern
                 default:
                     throw new Exception("对不起，您所点的咖啡没有");
             }
+
+            return coffee;
+        }
+    }
+    
+    /// <summary>
+    /// 咖啡店点餐系统，该系统可以为顾客提供美式咖啡与拿铁咖啡
+    /// </summary>
+    public class CoffeeStore
+    {
+        /// <summary>
+        /// 点咖啡功能
+        /// </summary>
+        /// <param name="type">咖啡名</param>
+        /// <returns>咖啡<see cref="Coffee"/></returns>
+        public Coffee OrderCoffee(string type)
+        {
+            var factory = new SimpleCoffeeFactory();
+            var coffee = factory.CreateCoffee(type);
 
             // 加奶
             coffee.AddMilk();
