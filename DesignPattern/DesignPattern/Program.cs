@@ -64,7 +64,7 @@ namespace DesignPattern
         /// <param name="type">咖啡名</param>
         /// <returns>咖啡<see cref="Coffee"/></returns>
         /// <exception cref="Exception"></exception>
-        public Coffee CreateCoffee(string type)
+        public static Coffee CreateCoffee(string type)
         {
             Coffee coffee = null;
             switch (type)
@@ -95,8 +95,7 @@ namespace DesignPattern
         /// <returns>咖啡<see cref="Coffee"/></returns>
         public Coffee OrderCoffee(string type)
         {
-            var factory = new SimpleCoffeeFactory();
-            var coffee = factory.CreateCoffee(type);
+            var coffee = SimpleCoffeeFactory.CreateCoffee(type);
 
             // 加奶
             coffee.AddMilk();
