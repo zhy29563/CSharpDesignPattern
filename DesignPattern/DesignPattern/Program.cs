@@ -6,115 +6,76 @@ namespace DesignPattern
     {
         public static void Main(string[] args)
         {
-            var store = new CoffeeStore();
-            store.Factory = new LatteCoffeeFactory();
-            var coffee = store.OrderCoffee();
+            IDessertFactory factory = new AmericanDessertFactory();
+            var coffee = factory.CreateCoffee();
+            var dessert = factory.CreateDessert();
             Console.WriteLine(coffee.Name);
+            dessert.Show();
 	
-            Console.WriteLine("----------------------------");
-            store.Factory = new AmericanCoffeeFactory();
-            store.OrderCoffee();
+            factory = new ItalyDessertFactory();
+            coffee = factory.CreateCoffee();
+            dessert = factory.CreateDessert();
             Console.WriteLine(coffee.Name);
+            dessert.Show();
         }
     }
     
-    /// <summary>
-    /// 抽象产品
-    /// </summary>
+    // 咖啡抽象基类
     public abstract class Coffee
     {
-        /// <summary>
-        /// 咖啡名称
-        /// </summary>
-        public abstract string Name {get; }
-
-        /// <summary>
-        /// 加糖功能
-        /// </summary>
+        public abstract string Name { get; }
         public void AddSugar() => Console.WriteLine("加糖");
-
-        /// <summary>
-        /// 加奶功能
-        /// </summary>
         public void AddMilk() => Console.WriteLine("加奶");
     }
 
-    /// <summary>
-    /// 具体产品
-    /// </summary>
+    // 属于意大利产品族中的咖啡产品
     public class LatteCoffee : Coffee
     {
-        /// <summary>
-        /// <inheritdoc cref="Name"/>
-        /// </summary>
         public override string Name => "拿铁咖啡";
     }
 
-    /// <summary>
-    /// 具体产品
-    /// </summary>
+    // 属于美式产品族中的咖啡产品
     public class AmericanCoffee : Coffee
     {
-        /// <summary>
-        /// <inheritdoc cref="Name"/>
-        /// </summary>
         public override string Name => "美式咖啡";
     }
 
-    /// <summary>
-    /// 抽象工厂
-    /// </summary>
-    public interface ICoffeeFactory
+    // 甜品基类
+    public abstract class Dessert
     {
-        /// <summary>
-        /// 制作咖啡功能
-        /// </summary>
-        /// <returns>咖啡</returns>
+        public abstract void Show();
+    }
+
+    // 属于美式产品族中的甜品产品
+    public class MatchaMousse : Dessert
+    {
+        public override void Show() => Console.WriteLine("抹茶慕斯");
+    }
+
+    // 属于意大利产品族中的甜品产品
+    public class Trimisu : Dessert
+    {
+        public override void Show() => Console.WriteLine("提拉米苏");
+    }
+
+    // 产品族工厂抽象基类
+    public interface IDessertFactory
+    {
         Coffee CreateCoffee();
+        Dessert CreateDessert();
     }
 
-    /// <summary>
-    /// 具体工厂
-    /// </summary>
-    public class LatteCoffeeFactory : ICoffeeFactory
+    // 美式产品族工厂
+    public class AmericanDessertFactory : IDessertFactory
     {
-        /// <inheritdoc cref="Coffee"/>
-        public Coffee CreateCoffee()=>new LatteCoffee();
+        public Coffee CreateCoffee() => new AmericanCoffee();	
+        public Dessert CreateDessert() => new MatchaMousse();
     }
 
-    /// <summary>
-    /// 具体工厂
-    /// </summary>
-    public class AmericanCoffeeFactory : ICoffeeFactory
+    // 意大利产品族工厂
+    public class ItalyDessertFactory : IDessertFactory
     {
-        /// <inheritdoc cref="Coffee"/>
-        public Coffee CreateCoffee() => new AmericanCoffee();
-    }
-    
-    /// <summary>
-    /// 咖啡店点餐系统，该系统可以为顾客提供美式咖啡与拿铁咖啡
-    /// </summary>
-    public class CoffeeStore
-    {
-        /// <summary>
-        /// 咖啡工厂抽象基类属性
-        /// </summary>
-        public ICoffeeFactory Factory {get;set;}
-        
-        /// <summary>
-        /// 点咖啡功能
-        /// </summary>
-        /// <returns>咖啡<see cref="Coffee"/></returns>
-        public Coffee OrderCoffee()
-        {
-            var coffee = this.Factory.CreateCoffee();
-
-            // 加奶
-            coffee.AddMilk();
-            // 加糖
-            coffee.AddSugar();
-
-            return coffee;
-        }
+        public Coffee CreateCoffee() => new LatteCoffee();
+        public Dessert CreateDessert() => new Trimisu();
     }
 }
