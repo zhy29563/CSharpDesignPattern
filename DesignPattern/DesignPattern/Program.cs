@@ -13,28 +13,15 @@ namespace DesignPattern
     }
     
     /// <summary>
-    /// 懒汉式：双检查线程安全
+    /// 不完全懒汉式，不加锁的线程安全
     /// </summary>
     public sealed class Singleton
     {
-        private static readonly object Locker = new object();
-        private static volatile Singleton _instance;
-        public static Singleton Instance
-        {
-            get
-            {
-                if (_instance != null) return _instance;
-                lock (Locker)
-                {
-                    if (_instance == null)
-                    {
-                        _instance = new Singleton();
-                    }
-                }
-                return _instance;
-            }
-        }
-    
+        /// <summary>
+        /// 显式的静态构造函数用来告诉C#编译器在其内容实例化之前不要标记其类型
+        /// </summary>
+        static Singleton() { }
         private Singleton() { }
+        public static Singleton Instance { get; } = new Singleton();
     }
 }
