@@ -13,20 +13,25 @@ namespace DesignPattern
     }
     
     /// <summary>
-    /// 懒汉式：简单线程安全
+    /// 懒汉式：双检查线程安全
     /// </summary>
     public sealed class Singleton
     {
         private static readonly object Locker = new object();
-        private static Singleton _instance = null;
+        private static volatile Singleton _instance;
         public static Singleton Instance
         {
             get
             {
+                if (_instance != null) return _instance;
                 lock (Locker)
                 {
-                    return _instance ?? (_instance = new Singleton());
+                    if (_instance == null)
+                    {
+                        _instance = new Singleton();
+                    }
                 }
+                return _instance;
             }
         }
     
